@@ -1,8 +1,14 @@
 fileFormatVersion: 2
-guid: 2413ed4eff2fd8743b528cc5051b81e4
+guid: da567f93504049341bc8ad9aecea0d63
 ModelImporter:
   serializedVersion: 19301
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: -9165865403480842816
+    second: Root|0.Targeting Pose
+  - first:
+      74: 2910742486769232160
+    second: Root|Idle
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -31,7 +37,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -63,7 +69,7 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 2
+    tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1

@@ -9,11 +9,20 @@ public class Selectable : MonoBehaviour
     public float lineHeight = 2f;
     public Material lineMaterial;
     private LineRenderer lineRenderer;
+    private float cooldownTime = 2f;
+
+    [Range(0, 1)]
+    public float percentHead = 0.4f;
+
 
     private float forceStrength = 500f;
     private Rigidbody rgbd;
     private bool initSelected = false;
     private Transform lineStartPoint;
+    private Outline outline;
+
+    private StateManager stateManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,24 +31,34 @@ public class Selectable : MonoBehaviour
         line.AddComponent<LineRenderer>();
         lineRenderer = line.GetComponent<LineRenderer>();
         lineStartPoint = transform.Find("lineStartPoint");
+        outline = GetComponent<Outline>();
 
         rgbd = GetComponentInChildren<Rigidbody>();
+        stateManager = GameObject.Find("StateManager").GetComponent<StateManager>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (stateManager.onCooldown) { return; }
         if (initSelected && Input.GetMouseButtonDown(0)) { AddForceToObject(); }
-        if (isSelected) { enableArrowLaunch(); }
+        if (isSelected) { 
+            enableArrowLaunch();
+            enableOutline();
+        }
         GetComponentInChildren<SphereCollider>();
         // add force to object
 
         if (Input.GetKeyDown(KeyCode.X) && isSelected)
         {
             isSelected = false;
+            stateManager.isSelected = false;
+            disableOutline();
         }
     }
 
+    // After action is used
     private void AddForceToObject()
     {
         Debug.Log("hello");
@@ -48,6 +67,7 @@ public class Selectable : MonoBehaviour
         isSelected = false;
         initSelected = false;
         lineRenderer.positionCount = 0;
+        StartCoroutine(StartCooldown());
     }
 
     void enableArrowLaunch()
@@ -61,52 +81,55 @@ public class Selectable : MonoBehaviour
             hitPoint.y = lineHeight;
             Vector3 startPos = new Vector3(lineStartPoint.position.x, lineHeight, lineStartPoint.position.z);
 
-            //lineRenderer.useWorldSpace = true;
+            // arrowhead stuff
 
             lineRenderer.startWidth = 0.3f;
-            lineRenderer.positionCount = 2;
-            lineRenderer.SetPosition(0, startPos);
+            lineRenderer.positionCount = 4;
             Vector3 direction = hitPoint - startPos;
+            Vector3 endPos = startPos + (Vector3.Normalize(direction) * distance);
 
-            lineRenderer.SetPosition(1, startPos + (Vector3.Normalize(direction) * distance));
-            lineRenderer.materials[0] = lineMaterial;
+            lineRenderer.widthCurve = new AnimationCurve(
+                new Keyframe(0, 0.4f)
+                , new Keyframe(0.999f - percentHead, 0.4f)  // neck of arrow
+                , new Keyframe(1 - percentHead, 1f)  // max width of arrow head
+                , new Keyframe(1, 0f));  // tip of arrow
+            lineRenderer.SetPositions(new Vector3[] {
+              startPos
+              , Vector3.Lerp(startPos, endPos, 0.999f - percentHead)
+              , Vector3.Lerp(startPos, endPos, 1 - percentHead)
+              , endPos });
+
+
+            //lineRenderer.materials[0] = lineMaterial;
+            lineRenderer.material = lineMaterial;
             lineRenderer.materials[0].mainTextureScale = new Vector3(distance, 1, 1);
+            lineRenderer.material.color = Color.blue;
+
             lineRenderer.useWorldSpace = true;
         }
         initSelected = true;
-        /*
-        Debug.Log(screenPoint);
 
-        screenPoint.y = 0.5f;
+    }
 
+    IEnumerator StartCooldown()
+    {
+        stateManager.onCooldown = true;
+        yield return new WaitForSeconds(cooldownTime);
+        stateManager.onCooldown = false;
+        disableOutline();
+        stateManager.isSelected = false;
+    }
 
-        Plane objPlane = new Plane(Vector3.up, transform.position);
+    private void enableOutline()
+    {
+        outline.OutlineWidth = 5f;
+        outline.OutlineColor = new Color(0.4f, 0, 0.5f);
+    }
 
-        Ray mRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Ray mouseRay = GenerateMouseRay();
-        float rayDistance;
-        objPlane.Raycast(mouseRay, out rayDistance);
-        Vector3 m0 = transform.position - mRay.GetPoint(rayDistance);
-
-        mRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (objPlane.Raycast(mRay, out rayDistance))
-        {
-            screenPoint = mRay.GetPoint(rayDistance) + m0;
-        }
-
-
-        GameObject line = new GameObject();
-        line.AddComponent<LineRenderer>();
-        LineRenderer lineRenderer = line.GetComponent<LineRenderer>();
-        lineRenderer.useWorldSpace = true;
-
-        lineRenderer.GetComponent<LineRenderer>().startWidth = 0.05f;
-        lineRenderer.GetComponent<LineRenderer>().positionCount = 2;
-        lineRenderer.SetPosition(0, transform.position);
-        lineRenderer.SetPosition(1, screenPoint);
-        Debug.Log(screenPoint);
-        */
-
+    private void disableOutline()
+    {
+        outline.OutlineWidth = 0f;
+        outline.OutlineColor = new Color(1, 1, 1);
     }
 
     Ray GenerateMouseRay()
