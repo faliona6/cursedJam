@@ -1014,8 +1014,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1238317122}
   - component: {fileID: 1238317121}
+  - component: {fileID: 1238317123}
   m_Layer: 0
-  m_Name: GameLogic
+  m_Name: StateManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1047,6 +1048,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1238317123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238317120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f12d01e2f0a57114b9f8d21720318562, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onCooldown: 0
+  isSelected: 0
+  startingHealth: 3
+  curHealth: 0
 --- !u!114 &1303891400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1753,6 +1770,7 @@ GameObject:
   - component: {fileID: 5293332612962825608}
   - component: {fileID: 5293332612962825607}
   - component: {fileID: 5293332612962825606}
+  - component: {fileID: 5293332612962825609}
   m_Layer: 0
   m_Name: tableGlass
   m_TagString: Interactable
@@ -1807,6 +1825,24 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 5571919438085151084, guid: 8d80ce74890b51f42a7b4fe029072536, type: 3}
+--- !u!114 &5293332612962825609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5293332612962825605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!4 &5557582452708907049
 Transform:
   m_ObjectHideFlags: 0
