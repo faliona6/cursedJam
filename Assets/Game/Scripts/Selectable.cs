@@ -9,7 +9,7 @@ public class Selectable : MonoBehaviour
     public float lineHeight = 2f;
     public Material lineMaterial;
     private LineRenderer lineRenderer;
-    private float cooldownTime = 2f;
+    private float cooldownTime = 5f;
 
     [Range(0, 1)]
     public float percentHead = 0.4f;
@@ -64,9 +64,11 @@ public class Selectable : MonoBehaviour
         Debug.Log("hello");
         Vector3 direction = lineRenderer.GetPosition(1) - lineRenderer.GetPosition(0);
         rgbd.AddForce(Vector3.Normalize(direction + new Vector3(0, 1, 0)) * forceStrength);
-        isSelected = false;
         initSelected = false;
+        isSelected = false;
+
         lineRenderer.positionCount = 0;
+        GetComponent<PlayerObjects>().changeSuspicion(true);
         StartCoroutine(StartCooldown());
     }
 
@@ -117,6 +119,7 @@ public class Selectable : MonoBehaviour
         stateManager.onCooldown = true;
         yield return new WaitForSeconds(cooldownTime);
         stateManager.onCooldown = false;
+        isSelected = false;
         disableOutline();
         stateManager.isSelected = false;
     }

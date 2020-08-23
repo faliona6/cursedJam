@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class PlayerObjects : MonoBehaviour
 {
-    private Boolean suspicious;
+    private bool suspicious;
     // Start is called before the first frame update
     void Start()
     {
-        suspicious = true;   
+        suspicious = false;
     }
 
     // Update is called once per frame
@@ -18,12 +18,12 @@ public class PlayerObjects : MonoBehaviour
         
     }
 
-    public void changeSuspicion (Boolean toChange)
+    public void changeSuspicion (bool toChange)
     {
         suspicious = toChange;
     }
 
-    public Boolean isSuspicious()
+    public bool isSuspicious()
     {
         return suspicious;
     }
