@@ -6,12 +6,13 @@ using UnityEngine.AI;
 
 public class HumanController : MonoBehaviour
 {
-    public NavMeshAgent agent;
     public GameObject waypointPositions;
     private List<Transform> waypointList = new List<Transform>();
     private SphereCollider detector;
     private Boolean pursuing;
     private GameObject target;
+    private NavMeshAgent agent;
+
 
     private float distToObjectBeforeSpray = 5f;
     private ParticleSystem waterSpray;
@@ -19,6 +20,11 @@ public class HumanController : MonoBehaviour
     private float waterCooldownTime = 2f;
 
     private StateManager stateManager;
+
+    // animation and ragdoll
+    private Rigidbody[] childRigidbodies;
+    private Collider[] childColliders;
+
 
 
     // Start is called before the first frame update
@@ -34,7 +40,9 @@ public class HumanController : MonoBehaviour
 
         waterSpray = GetComponentInChildren<ParticleSystem>();
         stateManager = GameObject.Find("StateManager").GetComponent<StateManager>();
-
+        childRigidbodies = GetComponentsInChildren<Rigidbody>();
+        childColliders = GetComponentsInChildren<Collider>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
@@ -98,6 +106,37 @@ public class HumanController : MonoBehaviour
     {
         yield return new WaitForSeconds(waterCooldownTime);
         isSprayingWater = false;
+    }
+
+    private void toggleRigidBodies(bool isKinematic)
+    {
+        foreach (Rigidbody rgbd in childRigidbodies)
+        {
+            rgbd.isKinematic = isKinematic;
+        }
+    }
+
+    private void toggleColliders(bool enabled)
+    {
+        foreach (Collider col in childColliders)
+        {
+            col.enabled = enabled;
+        }
+    }
+
+    private void enableRagDoll()
+    {
+        toggleRigidBodies(true);
+        toggleColliders(true);
+        agent.enabled = false;
+    }
+
+    private void disableRagDoll()
+    {
+        toggleRigidBodies(false);
+        toggleColliders(false);
+        agent.enabled = true;
+
     }
 
 
