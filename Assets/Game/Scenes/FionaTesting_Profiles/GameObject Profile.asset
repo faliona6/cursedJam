@@ -15,10 +15,10 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   texture:
-    overrideState: 0
-    value: {fileID: 0}
+    overrideState: 1
+    value: {fileID: 8400000, guid: cae6307fd69360d4d80dbe477e9674e4, type: 2}
     defaultState: 1
   tiling:
     overrideState: 0
