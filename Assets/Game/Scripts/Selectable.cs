@@ -85,6 +85,7 @@ public class Selectable : MonoBehaviour
 
             lineRenderer.startWidth = 0.3f;
             lineRenderer.positionCount = 4;
+            lineRenderer.sortingOrder = 10;
             Vector3 direction = hitPoint - startPos;
             Vector3 endPos = startPos + (Vector3.Normalize(direction) * distance);
 
